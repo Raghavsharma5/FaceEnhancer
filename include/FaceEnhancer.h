@@ -3,31 +3,26 @@
 
 #include <opencv2/opencv.hpp>
 #include <string>
-#include <vector>
+#include "image_processor.h"
 
+// Main class to handle the face enhancement workflow
 class FaceEnhancer {
 public:
+    // Constructor
     FaceEnhancer();
-    ~FaceEnhancer();
-    
-    bool initialize();
-    cv::Mat enhanceFace(const cv::Mat& inputImage);
+
+    // Processes an image to enhance detected faces
+    // Returns true on success, false on failure
     bool processImage(const std::string& inputPath, const std::string& outputPath);
-    
+
 private:
-    cv::Mat preprocessImage(const cv::Mat& input);
-    cv::Mat applySuperResolution(const cv::Mat& face);
-    cv::Mat postprocessImage(const cv::Mat& enhanced);
-    
-    bool loadModels();
-    
-    // Model paths
-    std::string srModelPath;
-    std::string faceDetectionModelPath;
-    
-    // Model variables
-    void* srModel;
-    void* faceDetectionModel;
+    cv::CascadeClassifier faceCascade;
+
+    // Initializes the face detection model
+    bool initialize();
+
+    // Enhances a single face region
+    cv::Mat enhanceFaceRegion(const cv::Mat& faceRegion);
 };
 
 #endif // FACE_ENHANCER_H
